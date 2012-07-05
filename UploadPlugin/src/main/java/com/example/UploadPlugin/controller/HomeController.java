@@ -4,14 +4,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.net.URLClassLoader;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -20,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import co.ntier.cms.PluginDescriptor;
 
 import com.example.UploadPlugin.model.FileUpload;
+import com.example.UploadPlugin.util.DelegatingUrlClassLoader;
 
 @Controller
 public class HomeController {
@@ -53,32 +52,7 @@ public class HomeController {
 		final String classname = upload.getClassname();
 		System.out.println("Loading class " + classname);
 		
-		
-		
-		
-		URLClassLoader loader = new URLClassLoader(new URL[]{  
-				new URL(urlPath)
-		}){
-			
-			@Override
-			protected Class<?> findClass(String name)
-					throws ClassNotFoundException {
-				if(name.equals(classname) ){
-					System.out.println("Loading class " + classname + " myself");
-					return super.findClass(name);
-				}
-				System.out.println("Delegating loading class " + name + " to super");
-				try{
-					Class<?> result = Class.forName(name);
-					return result;
-				}catch(IllegalArgumentException e){
-					System.out.println("FAILED TO LOAD IT BY FORNAME");
-				}
-				
-				throw new RuntimeException("Couldn't load class via Plugin jar or application runtime");
-			}
-		};
-		
+		DelegatingUrlClassLoader loader = new DelegatingUrlClassLoader( new URL(urlPath) );
 		
 		Class<?> klass = loader.loadClass(classname);
 		System.out.println("Loaded " + klass);
@@ -99,4 +73,5 @@ public class HomeController {
 			response.flushBuffer();
 		}
 	}
+	
 }
