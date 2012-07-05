@@ -1,0 +1,18 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>co.ntier.cms</groupId>
+	<artifactId>hello-world-plugin</artifactId>
+	<version>1.0.0</version>
+	<name>Hello World CMS Plugin</name>
+	<description>Just a test</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>co.ntier.cms</groupId>
+			<artifactId>cms-plugin-api</artifactId>
+			<version>1.0.0</version>
+			<scope>runtime</scope>
+		</dependency>
+	</dependencies>
+</project>
